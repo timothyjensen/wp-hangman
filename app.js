@@ -3,11 +3,11 @@
 
     // List of variables that will hold data and state.
 
-    var guesses, // Characters that have been guessed by the player.
-      misses, // Incorrect guesses.
-      availableChars, // A-Z, 0-9
-      guessLimit, // Total number of allowed guesses. Typically 6.
+    var availableChars = [],
+      guessLimit = 6, // Total number of allowed guesses. Typically 6.
       answer,
+      guesses, // Characters that have been guessed by the player.
+      misses, // Incorrect guesses.
       currentGuess,
       stickmanCoordinates // Array of HTML canvas coordinates to draw.
 
@@ -20,10 +20,20 @@
      * answer could be passed to JS via localized script, but then the answer
      * would be available in the DOM (cheaters). So it's probably better to
      * grab the answer with AJAX.
+     * @returns {string}
      */
     function getAnswer () {
+      // Get the answer via AJAX.
+      return answer
+    }
 
-      // return answer;
+    /**
+     * Returns an array of the available characters.
+     * @returns {Array}
+     */
+    function setAvailableChars () {
+      // Loop through A-Z, 0-9 to build an array of available characters.
+      return availableChars
     }
 
     /**
@@ -32,9 +42,7 @@
      * why not do it with JS. We will interact with these placeholders quite
      * a bit, so let's give each one an id as well as a class.
      */
-    function renderEmptyPlaceholders () {
-
-    }
+    function renderEmptyPlaceholders () {}
 
     /**
      * Here we build our hanging device. How macabre.
@@ -42,9 +50,7 @@
      * with each incorrect guess. When the game begins there needs to be
      * a gallows in place.
      */
-    function renderGallows () {
-
-    }
+    function renderGallows () {}
 
     /***********************
      *  Player interaction
@@ -57,6 +63,7 @@
      *   player.
      */
     function validateCurrentGuess (currentGuess) {
+
       // I want to player to be able to type in their guesses as well as select
       // from the choices that are printed on the screen.  Need some help
       // figuring out how to handle that.
