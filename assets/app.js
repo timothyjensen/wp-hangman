@@ -14,15 +14,22 @@
      ***************/
 
     /**
-     * Answer will be defined by an editor using a shortcode attribute. The
-     * answer could be passed to JS via localized script, but then the answer
-     * would be available in the DOM (cheaters). So it's probably better to
-     * grab the answer with AJAX.
+     * Returns the base64 decoded answer, or an empty string on failure.
      * @returns {string}
      */
     function getAnswer () {
-      // Get the answer via AJAX.
-      return answer
+      if (typeof hangman_app_script_data.answer === 'undefined') {
+        return ''
+      }
+      else {
+        try {
+          return window.atob(hangman_app_script_data.answer)
+        }
+        catch (e) {
+          console.log('ERROR: Hangman answer not formatted correctly!')
+          return ''
+        }
+      }
     }
 
     /**
@@ -30,7 +37,16 @@
      * @returns {Array}
      */
     function setAvailableChars () {
-      // Loop through A-Z, 0-9 to build an array of available characters.
+      // A-Z.
+      for (var $i = 65; $i <= 90; $i++) {
+        availableChars.push(String.fromCharCode($i))
+      }
+
+      // 0-9.
+      for ($i = 48; $i <= 57; $i++) {
+        availableChars.push(String.fromCharCode($i))
+      }
+
       return availableChars
     }
 
@@ -147,5 +163,6 @@
       // Confirm they want to restart unless they are already out of guesses.
     }
 
+    console.log(getAnswer(), setAvailableChars())
   }
 )(window)
