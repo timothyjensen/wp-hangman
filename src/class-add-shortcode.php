@@ -152,6 +152,8 @@ class Add_Shortcode {
 			}
 		}
 
-		wp_localize_script( $script['handle'], $script['handle'] . '-data', $data );
+		$object_name = str_replace( '-', '_', $script['handle'] . '-data' );
+
+		wp_localize_script( $script['handle'], $object_name, $data );
 	}
 }
