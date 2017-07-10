@@ -148,6 +148,6 @@
       // Confirm they want to restart unless they are already out of guesses.
     }
 
-    console.log(getAnswer(), setAvailableChars())
+    console.log(getAnswer())
   }
 )(window)
