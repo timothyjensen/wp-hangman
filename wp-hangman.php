@@ -14,8 +14,8 @@
 
 namespace TimJensen\WP_Hangman;
 
-if ( ! defined( 'WP_HANGMAN_ASSETS_DIR' ) ) {
-	define( 'WP_HANGMAN_ASSETS_DIR', __DIR__ . '/assets' );
+if ( ! defined( 'WP_HANGMAN_ASSETS_URL' ) ) {
+	define( 'WP_HANGMAN_ASSETS_URL', plugin_dir_url( __FILE__ ) . 'assets' );
 }
 
 if ( ! defined( 'WP_HANGMAN_VIEWS_DIR' ) ) {

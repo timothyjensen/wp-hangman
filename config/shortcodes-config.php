@@ -25,7 +25,7 @@ return [
 	'scripts' => [
 		[
 			'handle' => 'hangman-app-script',
-			'src'    => WP_HANGMAN_ASSETS_DIR . '/app.js',
+			'src'    => WP_HANGMAN_ASSETS_URL . '/app.js',
 			'ver'    => '0.1.0',
 			'localize_script' => [
 //				'data' => 'hangman-app-script-test',
