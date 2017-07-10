@@ -3,7 +3,10 @@
 
     // List of variables that will hold data and state.
 
-    var availableChars = [],
+    var availableChars = [ 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'E', 'F',
+        'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+        'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9' ],
       remainingGuesses = 6, // Total number of allowed guesses. Typically 6.
       answer,
       currentGuesses = [], // Characters that have been guessed by the player.
@@ -30,24 +33,6 @@
           return ''
         }
       }
-    }
-
-    /**
-     * Returns an array of the available characters.
-     * @returns {Array}
-     */
-    function setAvailableChars () {
-      // A-Z.
-      for (var $i = 65; $i <= 90; $i++) {
-        availableChars.push(String.fromCharCode($i))
-      }
-
-      // 0-9.
-      for ($i = 48; $i <= 57; $i++) {
-        availableChars.push(String.fromCharCode($i))
-      }
-
-      return availableChars
     }
 
     /**
