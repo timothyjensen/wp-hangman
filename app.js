@@ -4,11 +4,9 @@
     // List of variables that will hold data and state.
 
     var availableChars = [],
-      guessLimit = 6, // Total number of allowed guesses. Typically 6.
+      remainingGuesses = 6, // Total number of allowed guesses. Typically 6.
       answer,
-      guesses, // Characters that have been guessed by the player.
-      misses, // Incorrect guesses.
-      currentGuess,
+      currentGuesses = [], // Characters that have been guessed by the player.
       stickmanCoordinates // Array of HTML canvas coordinates to draw.
 
     /***************
@@ -134,8 +132,8 @@
      * @param {number} misses Total number of misses.
      * @returns {boolean}
      */
-    function isGameOver (misses) {
-      return misses >= guessLimit
+    function isGameOver () {
+      return 0 < remainingGuesses
     }
 
     /**
