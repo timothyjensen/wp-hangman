@@ -23,6 +23,7 @@ if ( ! defined( 'WP_HANGMAN_VIEWS_DIR' ) ) {
 }
 
 require __DIR__ . '/src/class-add-shortcode.php';
+require __DIR__ . '/src/enqueue-styles.php';
 
 $hangman_shortcode = new Add_Shortcode(
 	include __DIR__ . '/config/shortcodes-config.php'

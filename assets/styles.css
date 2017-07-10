@@ -1,6 +1,7 @@
-#app {
+#hangman-app {
 	background: #221212;
 	height: 100%;
+	margin: 40px auto;
+	padding: 30px;
 	width: 100%;
-	position: absolute;
 }
