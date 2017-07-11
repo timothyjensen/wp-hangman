@@ -3,14 +3,77 @@
 
     // List of variables that will hold data and state.
 
-    var availableChars = [ 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'E', 'F',
-        'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-        'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7',
-        '8', '9' ],
-      remainingGuesses = 6, // Total number of allowed guesses. Typically 6.
+    var availableChars = [
+        'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+        'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      ],
+      remainingGuesses = 10,
       answer,
       currentGuesses = [], // Characters that have been guessed by the player.
-      stickmanCoordinates // Array of HTML canvas coordinates to draw.
+      canvasSelector = document.getElementById('hangman-canvas'),
+      canvasContext = canvasSelector.getContext('2d'),
+      stickmanCoordinates = [
+        { // Base.
+          'lineStartX': 20,
+          'lineStartY': 380,
+          'lineEndX': 280,
+          'lineEndY': 380,
+        },
+        { // Post.
+          'lineStartX': 40,
+          'lineStartY': 20,
+          'lineEndX': 40,
+          'lineEndY': 380,
+        },
+        { // Boom.
+          'lineStartX': 40,
+          'lineStartY': 20,
+          'lineEndX': 150,
+          'lineEndY': 20,
+        },
+        { // Rope.
+          'lineStartX': 150,
+          'lineStartY': 20,
+          'lineEndX': 150,
+          'lineEndY': 60,
+        },
+        { // Head.
+          'arcCenterX': 150,
+          'arcCenterY': 80,
+          'radius': 20,
+        },
+        { // Torso.
+          'lineStartX': 150,
+          'lineStartY': 100,
+          'lineEndX': 150,
+          'lineEndY': 250,
+        },
+        { // Left leg.
+          'lineStartX': 150,
+          'lineStartY': 250,
+          'lineEndX': 75,
+          'lineEndY': 350,
+        },
+        { // Right leg.
+          'lineStartX': 150,
+          'lineStartY': 250,
+          'lineEndX': 225,
+          'lineEndY': 350,
+        },
+        { // Left arm.
+          'lineStartX': 150,
+          'lineStartY': 150,
+          'lineEndX': 80,
+          'lineEndY': 125,
+        },
+        { // Right arm.
+          'lineStartX': 150,
+          'lineStartY': 150,
+          'lineEndX': 220,
+          'lineEndY': 125,
+        },
+      ]
 
     /***************
      *  Game Setup
@@ -44,12 +107,31 @@
     function renderEmptyPlaceholders () {}
 
     /**
-     * Here we build our hanging device. How macabre.
-     * We'll use HTML5 canvas since we need to make our stickman grow
-     * with each incorrect guess. When the game begins there needs to be
-     * a gallows in place.
+     * Draws an HTML canvas line.
+     * @param {number} coordinatesIndex Stickman coordinates index
      */
-    function renderGallows () {}
+    function drawCanvasLine (coordinatesIndex) {
+      canvasContext.beginPath()
+
+      var path = stickmanCoordinates[coordinatesIndex]
+
+      // Check if we should draw a circle or line.
+      if (path.hasOwnProperty('radius')) {
+        canvasContext.arc(path.arcCenterX, path.arcCenterY, path.radius, 0,
+          2 * Math.PI)
+      }
+      else {
+        canvasContext.moveTo(
+          path.lineStartX,
+          path.lineStartY
+        )
+        canvasContext.lineTo(
+          path.lineEndX,
+          path.lineEndY
+        )
+      }
+      canvasContext.stroke()
+    }
 
     /***********************
      *  Player interaction
@@ -148,6 +230,10 @@
       // Confirm they want to restart unless they are already out of guesses.
     }
 
-    console.log(getAnswer())
+    canvasSelector.width = 300
+    canvasSelector.height = 400
+    for (var i = 0; i < stickmanCoordinates.length; i++) {
+      drawCanvasLine(i)
+    }
   }
 )(window)
