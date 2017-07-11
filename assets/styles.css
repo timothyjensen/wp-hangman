@@ -1,4 +1,22 @@
-#hangman-app {
+#hangman-available-characters {
+	background: #95b8ce;
+	padding: 20px;
+}
+
+#hangman-available-characters-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0 auto;
+}
+
+.hangman-available-character {
+	list-style-type: none !important;
+	margin: 2px 5px;
+	padding: 5px 10px;
+}
+
+#hangman-figure {
 	clear: both;
 	display: inline-block;
 	background: #95b8ce;
@@ -9,7 +27,4 @@
 
 #hangman-canvas {
 	border: 2px solid #fff;
-	/*height: 400px;*/
-	/*max-width: 100%;*/
-	/*width: 600px;*/
 }

@@ -4,15 +4,17 @@
     // List of variables that will hold data and state.
 
     var availableChars = [
-        'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-        'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       ],
       remainingGuesses = 10,
       answer,
       currentGuesses = [], // Characters that have been guessed by the player.
       canvasSelector = document.getElementById('hangman-canvas'),
       canvasContext = canvasSelector.getContext('2d'),
+      availableCharsSelector = document.getElementById(
+        'hangman-available-characters'),
       stickmanCoordinates = [
         { // Base.
           'lineStartX': 20,
@@ -104,13 +106,33 @@
      * why not do it with JS. We will interact with these placeholders quite
      * a bit, so let's give each one an id as well as a class.
      */
-    function renderEmptyPlaceholders () {}
+    function renderEmptyPlaceholders () {
+
+    }
 
     /**
-     * Draws an HTML canvas line.
+     * Renders the available characters.
+     */
+    function renderAvailableChars () {
+
+      var html = '<ul id="hangman-available-characters-list">'
+
+      for (var $i = 0; $i < availableChars.length; $i++) {
+        html += '<li class="hangman-available-character" data-char-code="' +
+                availableChars[$i].charCodeAt(0) + '">' + availableChars[$i] +
+                '</li>'
+      }
+
+      html += '</ul>'
+
+      availableCharsSelector.innerHTML += html
+    }
+
+    /**
+     * Draws the hangman figure.
      * @param {number} coordinatesIndex Stickman coordinates index
      */
-    function drawCanvasLine (coordinatesIndex) {
+    function drawHangman (coordinatesIndex) {
       canvasContext.beginPath()
 
       var path = stickmanCoordinates[coordinatesIndex]
@@ -230,10 +252,13 @@
       // Confirm they want to restart unless they are already out of guesses.
     }
 
+    renderAvailableChars()
+
+    console.log(availableCharsSelector)
     canvasSelector.width = 300
     canvasSelector.height = 400
     for (var i = 0; i < stickmanCoordinates.length; i++) {
-      drawCanvasLine(i)
+      drawHangman(i)
     }
   }
 )(window)
