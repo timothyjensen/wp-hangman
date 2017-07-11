@@ -9,12 +9,14 @@
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       ],
       remainingGuesses = 10,
-      answer,
+      answer = getAnswer(),
       currentGuesses = [], // Characters that have been guessed by the player.
-      canvasSelector = document.getElementById('hangman-canvas'),
-      canvasContext = canvasSelector.getContext('2d'),
       availableCharsSelector = document.getElementById(
         'hangman-available-characters'),
+      answerPlaceholdersSelector = document.getElementById(
+        'hangman-answer-placeholders'),
+      canvasSelector = document.getElementById('hangman-canvas'),
+      canvasContext = canvasSelector.getContext('2d'),
       stickmanCoordinates = [
         { // Base.
           'lineStartX': 20,
@@ -108,6 +110,21 @@
      */
     function renderEmptyPlaceholders () {
 
+      var answerChars = answer.split(''),
+        html = '<ul id="hangman-placeholders">'
+
+      for (var $i = 0; $i < answerChars.length; $i++) {
+        if (' ' === answerChars[$i]) {
+          html += '<li class="character-placeholder space"></li>'
+        }
+        else {
+          html += '<li class="character-placeholder"></li>'
+        }
+      }
+
+      html += '</ul>'
+
+      answerPlaceholdersSelector.innerHTML += html
     }
 
     /**
@@ -253,7 +270,7 @@
     }
 
     renderAvailableChars()
-
+    renderEmptyPlaceholders()
     console.log(availableCharsSelector)
     canvasSelector.width = 300
     canvasSelector.height = 400

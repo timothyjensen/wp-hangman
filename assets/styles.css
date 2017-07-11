@@ -1,19 +1,31 @@
-#hangman-available-characters {
+#hangman-available-characters,
+#hangman-answer-placeholders {
 	background: #95b8ce;
+	margin: 20px auto;
 	padding: 20px;
 }
 
-#hangman-available-characters-list {
+#hangman-available-characters-list,
+#hangman-placeholders {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	margin: 0 auto;
 }
 
-.hangman-available-character {
+.hangman-available-character,
+.character-placeholder {
 	list-style-type: none !important;
 	margin: 2px 5px;
 	padding: 5px 10px;
+}
+
+.character-placeholder {
+	border-bottom: 2px solid gray;
+}
+
+.character-placeholder.space {
+	border-bottom: none;
 }
 
 #hangman-figure {
