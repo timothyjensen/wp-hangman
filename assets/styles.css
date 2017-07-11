@@ -1,7 +1,15 @@
 #hangman-app {
-	background: #221212;
+	clear: both;
+	display: inline-block;
+	background: #95b8ce;
 	height: 100%;
 	margin: 40px auto;
-	padding: 30px;
-	width: 100%;
+	padding: 20px;
+}
+
+#hangman-canvas {
+	border: 2px solid #fff;
+	/*height: 400px;*/
+	/*max-width: 100%;*/
+	/*width: 600px;*/
 }
