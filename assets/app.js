@@ -12,7 +12,7 @@
       answer = getAnswer(),
       currentGuesses = [], // Characters that have been guessed by the player.
       availableCharsSelector = document.getElementById(
-        'hangman-available-characters'),
+        'hangman-available-characters-list'),
       answerPlaceholdersSelector = document.getElementById(
         'hangman-answer-placeholders'),
       canvasSelector = document.getElementById('hangman-canvas'),
@@ -103,12 +103,49 @@
     }
 
     /**
+     * Renders the available characters.
+     */
+    function renderAvailableChars () {
+      var html = ''
+      for (var $i = 0; $i < availableChars.length; $i++) {
+        html += '<li class="hangman-available-character" data-key-code="' +
+                availableChars[$i].charCodeAt(0) + '">' + availableChars[$i] +
+                '</li>'
+      }
+
+      availableCharsSelector.innerHTML += html
+    }
+
+    /**
+     * Retrieves the current guess and passes it to the validateCurrentGuess()
+     * function.
+     */
+    function addGuessListener () {
+
+      document.onkeydown = function (event) {
+        validateCurrentGuess(event.key.toUpperCase())
+      }
+
+      availableCharsSelector.addEventListener('click', function (event) {
+        if (event.target.matches('li')) {
+          validateCurrentGuess(event.target.textContent)
+        }
+      })
+
+    }
+
+    /**
      * Render the HTML to show empty placeholders for each of the characters
      * that comprise the answer. Really this could be done with PHP, but hey,
      * why not do it with JS. We will interact with these placeholders quite
      * a bit, so let's give each one an id as well as a class.
      */
     function renderEmptyPlaceholders () {
+
+      if (!answer) {
+        answerPlaceholdersSelector.innerHTML += '<strong>Oops! Something went wrong with retrieving the answer&hellip;</strong>'
+        return
+      }
 
       var answerChars = answer.split(''),
         html = '<ul id="hangman-placeholders"><li class="word-placeholder"><ul>'
@@ -129,24 +166,6 @@
       html += '</ul></li></ul>'
 
       answerPlaceholdersSelector.innerHTML += html
-    }
-
-    /**
-     * Renders the available characters.
-     */
-    function renderAvailableChars () {
-
-      var html = '<ul id="hangman-available-characters-list">'
-
-      for (var $i = 0; $i < availableChars.length; $i++) {
-        html += '<li class="hangman-available-character" data-char-code="' +
-                availableChars[$i].charCodeAt(0) + '">' + availableChars[$i] +
-                '</li>'
-      }
-
-      html += '</ul>'
-
-      availableCharsSelector.innerHTML += html
     }
 
     /**
@@ -185,7 +204,7 @@
      * @param {string} char Character to check.
      * @returns {boolean}
      */
-    function isValidChar( char ) {
+    function isValidChar (char) {
       return availableChars.includes(char.toUpperCase())
     }
 
@@ -197,6 +216,12 @@
      */
     function validateCurrentGuess (currentGuess) {
 
+      if( !isValidChar(currentGuess)) {
+        console.log('Invalid guess');
+        return;
+      }
+
+      console.log('validating current guess: ' + currentGuess)
       // I want to player to be able to type in their guesses as well as select
       // from the choices that are printed on the screen.  Need some help
       // figuring out how to handle that.
@@ -282,13 +307,20 @@
       // Confirm they want to restart unless they are already out of guesses.
     }
 
-    renderAvailableChars()
-    renderEmptyPlaceholders()
-    console.log(availableCharsSelector)
-    canvasSelector.width = 300
-    canvasSelector.height = 400
-    for (var i = 0; i < stickmanCoordinates.length; i++) {
-      drawHangman(i)
+    function init () {
+      renderAvailableChars()
+      renderEmptyPlaceholders()
+      addGuessListener()
+
+      canvasSelector.width = 300
+      canvasSelector.height = 400
+
+      for (var i = 0; i < stickmanCoordinates.length; i++) {
+        drawHangman(i)
+      }
     }
+
+    init()
+
   }
 )(window)
