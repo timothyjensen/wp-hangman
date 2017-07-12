@@ -148,7 +148,7 @@ class Add_Shortcode {
 			$encoding = $script['localize_script']['encode'];
 
 			foreach ( (array) $data as $key => $item ) {
-				$data[ $key ] = call_user_func_array( "{$encoding}_encode", [ $item ] );
+				$data[ $key ] = call_user_func_array( "{$encoding}_encode", [ trim( $item ) ] );
 			}
 		}
 
