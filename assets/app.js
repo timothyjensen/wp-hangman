@@ -177,6 +177,15 @@
      ***********************/
 
     /**
+     * Checks if a character exists in the available characters.
+     * @param {string} char Character to check.
+     * @returns {boolean}
+     */
+    function isValidChar( char ) {
+      return availableChars.includes(char.toUpperCase())
+    }
+
+    /**
      * Checks if the current guess matches a character in the answer and takes
      * the appropriate next step for the game.
      * @param {string|number} currentGuess Current guess submitted by the
