@@ -22,6 +22,10 @@
 	padding: 5px 10px;
 }
 
+.hangman-available-character.disabled {
+	opacity: 0.3;
+}
+
 .word-placeholder {
 	display: flex;
 }
@@ -30,12 +34,12 @@
 	border-bottom: 2px solid gray;
 }
 
-.character-placeholder.space,
-.character-placeholder.given {
-	border-bottom: none;
+.character-placeholder.space {
+	display: none;
 }
 
 .character-placeholder.given {
+	border-bottom: none;
 	margin: 0;
 	padding: 0;
 }
