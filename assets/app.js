@@ -8,13 +8,16 @@
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
       ],
-      remainingGuesses = 10,
+      maxGuesses = 10,
       answer = getAnswer(),
-      currentGuesses = [], // Characters that have been guessed by the player.
+      answerChars = answer.toUpperCase().split(''),
+      guessedChars = [],
+      misses = 0,
       availableCharsSelector = document.getElementById(
         'hangman-available-characters-list'),
       answerPlaceholdersSelector = document.getElementById(
         'hangman-answer-placeholders'),
+      characterPlaceholderElements = [],
       canvasSelector = document.getElementById('hangman-canvas'),
       canvasContext = canvasSelector.getContext('2d'),
       stickmanCoordinates = [
@@ -109,7 +112,8 @@
       var html = ''
       for (var $i = 0; $i < availableChars.length; $i++) {
         html += '<li class="hangman-available-character" data-key-code="' +
-                availableChars[$i].charCodeAt(0) + '">' + availableChars[$i] +
+                availableChars[$i].charCodeAt(0) + '" data-char="' +
+                availableChars[$i] + '">' + availableChars[$i] +
                 '</li>'
       }
 
@@ -147,12 +151,11 @@
         return
       }
 
-      var answerChars = answer.split(''),
-        html = '<ul id="hangman-placeholders"><li class="word-placeholder"><ul>'
+      var html = '<ul id="hangman-placeholders"><li class="word-placeholder"><ul>'
 
       for (var $i = 0; $i < answerChars.length; $i++) {
         if (' ' === answerChars[$i]) {
-          html += '</ul></li><li class="word-placeholder"><ul>'
+          html += '<li class="character-placeholder space"></ul></li><li class="word-placeholder"><ul>'
         }
         else if (!isValidChar(answerChars[$i])) {
           html += '<li class="character-placeholder given">' +
@@ -169,30 +172,11 @@
     }
 
     /**
-     * Draws the hangman figure.
-     * @param {number} coordinatesIndex Stickman coordinates index
+     * Retrieves the character placeholder elements.
      */
-    function drawHangman (coordinatesIndex) {
-      canvasContext.beginPath()
-
-      var path = stickmanCoordinates[coordinatesIndex]
-
-      // Check if we should draw a circle or line.
-      if (path.hasOwnProperty('radius')) {
-        canvasContext.arc(path.arcCenterX, path.arcCenterY, path.radius, 0,
-          2 * Math.PI)
-      }
-      else {
-        canvasContext.moveTo(
-          path.lineStartX,
-          path.lineStartY
-        )
-        canvasContext.lineTo(
-          path.lineEndX,
-          path.lineEndY
-        )
-      }
-      canvasContext.stroke()
+    function getCharacterPlaceholderElements () {
+      characterPlaceholderElements = answerPlaceholdersSelector.querySelectorAll(
+        '.character-placeholder')
     }
 
     /***********************
@@ -216,71 +200,78 @@
      */
     function validateCurrentGuess (currentGuess) {
 
-      if( !isValidChar(currentGuess)) {
-        console.log('Invalid guess');
-        return;
+      if (!isValidChar(currentGuess) || guessedChars.includes(currentGuess)) {
+        console.log('Invalid guess')
+        return
       }
 
-      console.log('validating current guess: ' + currentGuess)
-      // I want to player to be able to type in their guesses as well as select
-      // from the choices that are printed on the screen.  Need some help
-      // figuring out how to handle that.
+      guessedChars.push(currentGuess)
 
-      // If the player has typed an invalid character, for example the ESC
-      // button, then alert the player of their invalid guess.
+      // Is the current guess correct?
+      if (answerChars.includes(currentGuess)) {
+        printCorrectGuess(currentGuess)
+      }
+      else {
+        misses++
+        drawHangman(misses - 1)
+        if (isGameOver()) {
+          doGameEnd()
+        }
+      }
 
-      // if current guess matches a character in the answer
-      // printCorrectGuess();
-
-      // Else increment misses. If we've hit the limit of guesses then end the
-      // game.  Otherwise, draw the appropriate stickman body part and block out
-      // the incorrect character from the available choices.
+      // Disable the guessed character.
+      disableCharacter(currentGuess)
     }
 
     /**
      * Fills in the placeholders with correct guesses.
+     * @param {string} guess Player's guess.
      */
-    function printCorrectGuess () {}
+    function printCorrectGuess (guess) {
+      for (var $i = 0; $i < answerChars.length; $i++) {
+        if (answerChars[$i] === guess) {
+          characterPlaceholderElements[$i].innerHTML = guess
+        }
+      }
+    }
 
     /**
      * Disables characters from begin selected.
      * @param {string|number} character Character to be disabled.
      */
-    function disableCharacter (character) {}
-
-    /**
-     * Alert the player that they submitted an invalid guess.
-     */
-    function invalidCharAlert () {}
-
-    /**
-     * Each incorrect guess will result in the hangman growing a little more.
-     * Since each miss corresponds with a unique canvas stroke I'm thinking a
-     * switch statement might work well. On second thought, the coordinates
-     * could exist in as an array of objects.
-     * @param {number} misses Total number of misses.
-     */
-    function drawStickman (misses) {
-      // if ( 0 ==== misses ) drawStickmanHead(stickmanCoordinates[misses]);
-      // else drawStickmanBody(stickmanCoordinates[misses]);
+    function disableCharacter (character) {
+      var charSelector = availableCharsSelector.querySelector(
+        '[data-char="' + character + '"]')
+      if (!charSelector.classList.contains('disabled')) {
+        charSelector.className += ' disabled'
+      }
     }
 
     /**
-     * Draws the stickman's head.
-     * @param {object} canvasElementArgs Canvas coordinates and radius for the
-     *                 circle that will represent the stickman's head.
+     * Draws the hangman figure.
+     * @param {number} misses Stickman coordinates index
      */
-    function drawStickmanHead (canvasElementArgs) {
-      // Draw the HTML canvas circle to represent the head.
-    }
+    function drawHangman (misses) {
+      canvasContext.beginPath()
 
-    /**
-     * Draws the stickman's body parts.
-     * @param {object} canvasElementArgs Canvas coordinates for the
-     *   lines/strokes that will represent the stickman's body parts.
-     */
-    function drawStickmanBody (canvasElementArgs) {
-      // Draw the HTML canvas coordinates.
+      var path = stickmanCoordinates[misses]
+
+      // Check if we should draw a circle or line.
+      if (path.hasOwnProperty('radius')) {
+        canvasContext.arc(path.arcCenterX, path.arcCenterY, path.radius, 0,
+          2 * Math.PI)
+      }
+      else {
+        canvasContext.moveTo(
+          path.lineStartX,
+          path.lineStartY
+        )
+        canvasContext.lineTo(
+          path.lineEndX,
+          path.lineEndY
+        )
+      }
+      canvasContext.stroke()
     }
 
     /*****************
@@ -292,13 +283,16 @@
      * @returns {boolean}
      */
     function isGameOver () {
-      return 0 < remainingGuesses
+      console.log(maxGuesses, misses, maxGuesses <= misses)
+      return maxGuesses <= misses
     }
 
     /**
      * Ends the game.
      */
-    function doGameEnd () {}
+    function doGameEnd () {
+      alert('That\'s it buddy. You lose!')
+    }
 
     /**
      * Resets the game so player can start over.
@@ -311,13 +305,14 @@
       renderAvailableChars()
       renderEmptyPlaceholders()
       addGuessListener()
+      getCharacterPlaceholderElements()
 
       canvasSelector.width = 300
       canvasSelector.height = 400
-
-      for (var i = 0; i < stickmanCoordinates.length; i++) {
-        drawHangman(i)
-      }
+//
+//      for (var i = 0; i < stickmanCoordinates.length; i++) {
+//        drawHangman(i)
+//      }
     }
 
     init()
