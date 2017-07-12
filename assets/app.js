@@ -111,18 +111,22 @@
     function renderEmptyPlaceholders () {
 
       var answerChars = answer.split(''),
-        html = '<ul id="hangman-placeholders">'
+        html = '<ul id="hangman-placeholders"><li class="word-placeholder"><ul>'
 
       for (var $i = 0; $i < answerChars.length; $i++) {
         if (' ' === answerChars[$i]) {
-          html += '<li class="character-placeholder space"></li>'
+          html += '</ul></li><li class="word-placeholder"><ul>'
+        }
+        else if (!isValidChar(answerChars[$i])) {
+          html += '<li class="character-placeholder given">' +
+                  answerChars[$i] + '</li>'
         }
         else {
           html += '<li class="character-placeholder"></li>'
         }
       }
 
-      html += '</ul>'
+      html += '</ul></li></ul>'
 
       answerPlaceholdersSelector.innerHTML += html
     }
