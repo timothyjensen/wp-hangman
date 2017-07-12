@@ -6,7 +6,8 @@
 }
 
 #hangman-available-characters-list,
-#hangman-placeholders {
+#hangman-placeholders,
+.word-placeholder > ul {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -14,18 +15,29 @@
 }
 
 .hangman-available-character,
-.character-placeholder {
+.character-placeholder,
+.word-placeholder {
 	list-style-type: none !important;
 	margin: 2px 5px;
 	padding: 5px 10px;
+}
+
+.word-placeholder {
+	display: flex;
 }
 
 .character-placeholder {
 	border-bottom: 2px solid gray;
 }
 
-.character-placeholder.space {
+.character-placeholder.space,
+.character-placeholder.given {
 	border-bottom: none;
+}
+
+.character-placeholder.given {
+	margin: 0;
+	padding: 0;
 }
 
 #hangman-figure {
