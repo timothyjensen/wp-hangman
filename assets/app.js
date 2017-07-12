@@ -162,7 +162,7 @@
                   answerChars[$i] + '</li>'
         }
         else {
-          html += '<li class="character-placeholder"></li>'
+          html += '<li class="character-placeholder">_</li>'
         }
       }
 

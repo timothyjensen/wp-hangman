@@ -31,7 +31,10 @@
 }
 
 .character-placeholder {
-	border-bottom: 2px solid gray;
+	align-self: baseline;
+	margin: 2px 0;
+	max-width: 22px;
+	padding: 5px;
 }
 
 .character-placeholder.space {
@@ -39,7 +42,6 @@
 }
 
 .character-placeholder.given {
-	border-bottom: none;
 	margin: 0;
 	padding: 0;
 }
