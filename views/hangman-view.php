@@ -1,3 +1,7 @@
+<?php
+wp_enqueue_style('wp-hangman-font');
+wp_enqueue_style('wp-hangman-styles');
+?>
 <div id="hangman-game">
 	<div id="hangman-available-characters">
 		<ul id="hangman-available-characters-list"></ul>

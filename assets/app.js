@@ -1,7 +1,6 @@
-(
+;(
     function(window, document) {
-
-      // List of variables that will hold data and state.
+      'use strict';
 
       const availableChars = [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -22,15 +21,15 @@
           stickmanCoordinates = [
             { // Base.
               'lineStartX': 20,
-              'lineStartY': 380,
+              'lineStartY': 300,
               'lineEndX': 280,
-              'lineEndY': 380,
+              'lineEndY': 300,
             },
             { // Post.
               'lineStartX': 40,
               'lineStartY': 20,
               'lineEndX': 40,
-              'lineEndY': 380,
+              'lineEndY': 300,
             },
             { // Boom.
               'lineStartX': 40,
@@ -53,19 +52,19 @@
               'lineStartX': 150,
               'lineStartY': 100,
               'lineEndX': 150,
-              'lineEndY': 250,
+              'lineEndY': 220,
             },
             { // Left leg.
               'lineStartX': 150,
-              'lineStartY': 250,
+              'lineStartY': 220,
               'lineEndX': 75,
-              'lineEndY': 350,
+              'lineEndY': 280,
             },
             { // Right leg.
               'lineStartX': 150,
-              'lineStartY': 250,
+              'lineStartY': 220,
               'lineEndX': 225,
-              'lineEndY': 350,
+              'lineEndY': 280,
             },
             { // Left arm.
               'lineStartX': 150,
@@ -236,7 +235,7 @@
        */
       function addResetListener() {
         noticesSelector.addEventListener('click', function(event) {
-          if (event.target.matches('button#hangman-reset-game') ) {
+          if (event.target.matches('button#hangman-reset-game')) {
             resetGame();
           }
         });
@@ -247,7 +246,7 @@
        */
       function setupCanvas() {
         canvasSelector.width = 300;
-        canvasSelector.height = 400;
+        canvasSelector.height = 320;
       }
 
       /***********************
@@ -261,13 +260,11 @@
        *   player.
        */
       function validateCurrentGuess(currentGuess) {
-        if ('ESCAPE' === currentGuess) {
-          resetGame();
-        }
 
         if (playerWon() || playerLost()) {
           return;
         }
+
 
         if (!isValidChar(currentGuess) || guessedChars.includes(currentGuess)) {
           console.log('Invalid guess');
@@ -375,10 +372,10 @@
         var disabledChars = availableCharsSelector.querySelectorAll(
             'li.hangman-available-character.disabled'),
             blankPlaceholders = answerPlaceholdersSelector.querySelectorAll(
-            'li.guess')
+                'li.guess')
         ;
 
-        disabledChars.forEach(function(element){
+        disabledChars.forEach(function(element) {
           element.className = 'hangman-available-character';
         });
 
@@ -386,10 +383,10 @@
           element.innerHTML = '_';
         });
 
-
         noticesSelector.innerHTML = '';
 
-        canvasContext.clearRect(0, 0, canvasSelector.width, canvasSelector.height);
+        canvasContext.clearRect(0, 0, canvasSelector.width,
+            canvasSelector.height);
 
         guessedChars = [];
 

@@ -1,5 +1,11 @@
 {
   "name": "wp-hangman",
   "version": "0.1.0",
-  "author": "Tim Jensen"
+  "author": "Tim Jensen",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.6.0",
+    "gulp-minify": "^1.0.0",
+    "gulp-rename": "^1.2.2"
+  }
 }
