@@ -86,7 +86,7 @@
           characterPlaceholderElements = [];
 
       /***************
-       *  Game Setup
+       *  Helpers
        ***************/
 
       /**
@@ -122,6 +122,42 @@
       }
 
       /**
+       * Checks if a character exists in the available characters.
+       * @param {string} char Character to check.
+       * @returns {boolean}
+       */
+      function isValidChar(char) {
+        return availableChars.includes(char.toUpperCase());
+      }
+
+      /**
+       * Checks if the player lost.
+       * @returns {boolean}
+       */
+      function playerWon() {
+        var correctGuesses = guessedChars.sort().filter(function(char) {
+          return answerChars.includes(char);
+        });
+
+        return correctGuesses.length === answerChars.length &&
+               correctGuesses.every(function(element, index) {
+                 return element === answerChars[index];
+               });
+      }
+
+      /**
+       * Checks if the player lost.
+       * @returns {boolean}
+       */
+      function playerLost() {
+        return maxGuesses <= misses;
+      }
+
+      /***************
+       *  Game Setup
+       ***************/
+
+      /**
        * Renders the available characters.
        */
       function renderAvailableChars() {
@@ -134,24 +170,6 @@
         }
 
         availableCharsSelector.innerHTML += html;
-      }
-
-      /**
-       * Retrieves the current guess and passes it to the validateCurrentGuess()
-       * function.
-       */
-      function addGuessListener() {
-
-        document.onkeydown = function(event) {
-          validateCurrentGuess(event.key.toUpperCase());
-        };
-
-        availableCharsSelector.addEventListener('click', function(event) {
-          if (event.target.matches('li')) {
-            validateCurrentGuess(event.target.textContent);
-          }
-        });
-
       }
 
       /**
@@ -178,7 +196,7 @@
                     placeholderChars[$i] + '</li>';
           }
           else {
-            html += '<li class="character-placeholder">_</li>';
+            html += '<li class="character-placeholder guess">_</li>';
           }
         }
 
@@ -195,18 +213,46 @@
             '.character-placeholder');
       }
 
+      /**
+       * Retrieves the current guess and passes it to the validateCurrentGuess()
+       * function.
+       */
+      function addGuessListener() {
+
+        document.onkeydown = function(event) {
+          validateCurrentGuess(event.key.toUpperCase());
+        };
+
+        availableCharsSelector.addEventListener('click', function(event) {
+          if (event.target.matches('li')) {
+            validateCurrentGuess(event.target.textContent);
+          }
+        });
+
+      }
+
+      /**
+       * Resets the game when the appropriate button is clicked.
+       */
+      function addResetListener() {
+        noticesSelector.addEventListener('click', function(event) {
+          if (event.target.matches('button#hangman-reset-game') ) {
+            resetGame();
+          }
+        });
+      }
+
+      /**
+       * Sets up the HTML canvas.
+       */
+      function setupCanvas() {
+        canvasSelector.width = 300;
+        canvasSelector.height = 400;
+      }
+
       /***********************
        *  Player interaction
        ***********************/
-
-      /**
-       * Checks if a character exists in the available characters.
-       * @param {string} char Character to check.
-       * @returns {boolean}
-       */
-      function isValidChar(char) {
-        return availableChars.includes(char.toUpperCase());
-      }
 
       /**
        * Checks if the current guess matches a character in the answer and takes
@@ -215,8 +261,11 @@
        *   player.
        */
       function validateCurrentGuess(currentGuess) {
+        if ('ESCAPE' === currentGuess) {
+          resetGame();
+        }
 
-        if ( playerWon() || playerLost() ) {
+        if (playerWon() || playerLost()) {
           return;
         }
 
@@ -231,7 +280,6 @@
         if (answerChars.includes(currentGuess)) {
           printCorrectGuess(currentGuess);
           if (playerWon()) {
-            console.log('You just won');
             doGameEnd('won');
           }
         }
@@ -303,40 +351,17 @@
        *****************/
 
       /**
-       * Checks if the player lost.
-       * @returns {boolean}
-       */
-      function playerWon() {
-        var correctGuesses = guessedChars.sort().filter(function(char) {
-          return answerChars.includes(char);
-        });
-
-        return (
-                   correctGuesses.length === answerChars.length
-               ) && correctGuesses.every(function(element, index) {
-              return element === answerChars[index];
-            });
-      }
-
-      /**
-       * Checks if the player lost.
-       * @returns {boolean}
-       */
-      function playerLost() {
-        return maxGuesses <= misses;
-      }
-
-      /**
        * Ends the game.
        * @param {String} outcome Whether the player 'won' or not.
        */
       function doGameEnd(outcome) {
         var html;
 
-        if ( 'won' === outcome ) {
-          html = 'You won! Thanks for playing.';
-        } else {
-          html = 'Sorry, you\'re out of guesses.  Try again.';
+        if ('won' === outcome) {
+          html = '<p>You won! Thanks for playing.</p>';
+        }
+        else {
+          html = '<p>Sorry, you\'re out of guesses.  <button id="hangman-reset-game">Try again</button></p>';
         }
 
         noticesSelector.innerHTML = html;
@@ -346,18 +371,38 @@
        * Resets the game so player can start over.
        */
       function resetGame() {
-        // Confirm they want to restart unless they are already out of guesses.
+
+        var disabledChars = availableCharsSelector.querySelectorAll(
+            'li.hangman-available-character.disabled'),
+            blankPlaceholders = answerPlaceholdersSelector.querySelectorAll(
+            'li.guess')
+        ;
+
+        disabledChars.forEach(function(element){
+          element.className = 'hangman-available-character';
+        });
+
+        blankPlaceholders.forEach(function(element) {
+          element.innerHTML = '_';
+        });
+
+
+        noticesSelector.innerHTML = '';
+
+        canvasContext.clearRect(0, 0, canvasSelector.width, canvasSelector.height);
+
+        guessedChars = [];
+
+        misses = 0;
       }
 
       function init() {
         renderAvailableChars();
         renderEmptyPlaceholders();
-        addGuessListener();
         getCharacterPlaceholderElements();
-
-        console.log(answerChars);
-        canvasSelector.width = 300;
-        canvasSelector.height = 400;
+        addGuessListener();
+        addResetListener();
+        setupCanvas();
       }
 
       init();
