@@ -7,7 +7,7 @@
  * Author URI:      https://www.timjensen.us/
  * Text Domain:     wp-hangman
  * Domain Path:     /languages
- * Version:         0.2.0
+ * Version:         0.2.1
  *
  * @package         WP_Hangman
  */

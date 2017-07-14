@@ -1,12 +1,37 @@
 #hangman-game {
+    display: flex;
     clear: both;
+    flex-wrap: wrap;
     font-family: 'Ek Mukta', sans-serif;
     font-size: 18px;
     font-weight: 400;
-    margin: 0 auto;
-    max-width: 640px;
+    margin: 20px auto;
     overflow-x: scroll;
     text-align: center;
+}
+
+.hangman-flex-item {
+    flex-basis: 325px;
+    flex-grow: 1;
+    margin: 0 auto;
+}
+
+.hangman-flex-item.score {
+    flex-grow: 0;
+}
+
+#hangman-intro-content {
+    font-size: 2.6rem;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 20px;
+}
+
+#hangman-intro-content > *:last-of-type,
+#hangman-intro-content img {
+    margin-bottom: 0;
 }
 
 #hangman-game ul {
@@ -73,21 +98,13 @@ button#hangman-reset-game {
     margin: 2px 10px;
 }
 
-#hangman-figure {
-    clear: both;
-    display: inline-block;
-    height: 100%;
-    margin: 20px auto;
-    padding: 10px;
-}
-
 #hangman-canvas {
-    border: 2px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
 @media (min-width: 480px) {
     #hangman-game {
-        overflow-x: hidden;
+        overflow: hidden;
     }
 }

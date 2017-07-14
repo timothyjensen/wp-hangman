@@ -74,6 +74,7 @@ class Add_Shortcode {
 	 */
 	public function init() {
 		add_shortcode( $this->tag, [ $this, 'shortcode_callback' ] );
+		add_filter( 'the_content', [ $this, 'strip_empty_p_and_br_tags' ] );
 	}
 
 	/**
@@ -83,7 +84,7 @@ class Add_Shortcode {
 	 *
 	 * @return string
 	 */
-	public function shortcode_callback( $atts ) {
+	public function shortcode_callback( $atts, $content = '' ) {
 
 		$this->atts = shortcode_atts( (array) $this->args, (array) $atts, $this->tag );
 
@@ -158,5 +159,26 @@ class Add_Shortcode {
 		$object_name = str_replace( '-', '_', $script['handle'] . '-data' );
 
 		wp_localize_script( $script['handle'], $object_name, $data );
+	}
+
+	/**
+	 * Filters the content to remove any extra paragraph or break tags
+	 * caused by shortcodes.
+	 *
+	 * @author Thomas Griffin
+	 * @link https://thomasgriffin.io/remove-empty-paragraph-tags-shortcodes-wordpress/
+	 * @since 1.0.0
+	 *
+	 * @param string $content  String of HTML content.
+	 * @return string $content Amended string of HTML content.
+	 */
+	function strip_empty_p_and_br_tags( $content ) {
+
+		$array = array(
+			'<p>['    => '[',
+			']</p>'   => ']',
+			']<br />' => ']'
+		);
+		return strtr( $content, $array );
 	}
 }
