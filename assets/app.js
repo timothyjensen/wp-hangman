@@ -93,8 +93,12 @@
        * @returns {string}
        */
       function getAnswer() {
-        if (typeof hangman_app_script_data.answer === 'undefined') {
-          return '';
+        if (typeof hangman_app_script_data.answer === 'undefined' || hangman_app_script_data.answer === '' ) {
+          var object = getRandomWord().then(function (datums) {
+            return(datums);
+          });
+          console.log(object);
+          return object.word;
         }
         else {
           try {
@@ -117,6 +121,43 @@
 
         return answerArray.sort().filter(function(char, index, inputArray) {
           return isValidChar(char) && char !== inputArray[index - 1];
+        });
+      }
+
+//      function getRandomWord() {
+//        return new Promise(function(resolve, reject){
+//              const xhr = new XMLHttpRequest();
+//        xhr.open("GET", 'https://wordsapiv1.p.mashape.com/words/?random=true&lettersmin=5', true );
+//          xhr.setRequestHeader('X-Mashape-Key',
+//              'LKcbPUK1cYmshnxrePNM1AapZQsip1ZIuZ1jsn1BXYDI6z84cU');
+//        xhr.onload = function() {resolve(xhr.responseText)};
+//        xhr.onerror = function() {reject(xhr.statusText)};
+//        xhr.send();
+//      });
+//      }
+
+      function getRandomWord () {
+        return new Promise(function (resolve, reject) {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", 'https://wordsapiv1.p.mashape.com/words/?random=true&lettersmin=5');
+          xhr.setRequestHeader("X-Mashape-Key", "LKcbPUK1cYmshnxrePNM1AapZQsip1ZIuZ1jsn1BXYDI6z84cU");
+          xhr.onload = function () {
+            if (this.status >= 200 && this.status < 300) {
+              resolve(xhr.response);
+            } else {
+              reject({
+                status: this.status,
+                statusText: xhr.statusText
+              });
+            }
+          };
+          xhr.onerror = function () {
+            reject({
+              status: this.status,
+              statusText: xhr.statusText
+            });
+          };
+          xhr.send();
         });
       }
 
@@ -264,7 +305,6 @@
         if (playerWon() || playerLost()) {
           return;
         }
-
 
         if (!isValidChar(currentGuess) || guessedChars.includes(currentGuess)) {
           console.log('Invalid guess');
