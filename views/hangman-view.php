@@ -14,10 +14,10 @@ wp_enqueue_style( 'wp-hangman-styles' );
 				<?php echo $content; ?>
 			</div>
 		<?php endif; ?>
+		<div id="hangman-answer-placeholders"></div>
 		<div id="hangman-available-characters">
 			<ul id="hangman-available-characters-list"></ul>
 		</div>
-		<div id="hangman-answer-placeholders"></div>
 	</div>
 	<div class="hangman-flex-item score">
 		<div id="hangman-notices"></div>

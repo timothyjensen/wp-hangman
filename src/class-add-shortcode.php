@@ -166,11 +166,12 @@ class Add_Shortcode {
 	 * caused by shortcodes.
 	 *
 	 * @author Thomas Griffin
-	 * @link https://thomasgriffin.io/remove-empty-paragraph-tags-shortcodes-wordpress/
-	 * @since 1.0.0
+	 * @link   https://thomasgriffin.io/remove-empty-paragraph-tags-shortcodes-wordpress/
+	 * @since  1.0.0
 	 *
-	 * @param string $content  String of HTML content.
-	 * @return string $content Amended string of HTML content.
+	 * @param string $content String of HTML content.
+	 *
+	 * @return string
 	 */
 	function strip_empty_p_and_br_tags( $content ) {
 
@@ -179,6 +180,7 @@ class Add_Shortcode {
 			']</p>'   => ']',
 			']<br />' => ']'
 		);
+
 		return strtr( $content, $array );
 	}
 }
