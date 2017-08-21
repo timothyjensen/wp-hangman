@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     WP Hangman
- * Plugin URI:      https://github.com/cjkoepke/hangman
+ * Plugin URI:      https://github.com/timothyjensen/wp-hangman
  * Description:     Embed a hangman game using a shortcode.
  * Author:          Tim Jensen <tim@timjensen.us>
  * Author URI:      https://www.timjensen.us/
